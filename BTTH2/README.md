@@ -48,11 +48,3 @@ Chạy trên Kaggle: [DS201-Lab02](https://www.kaggle.com/code/hoanggyen/ds201-l
 | Bai2 | GoogLeNet | 10/10 | 0.4677 | 0.5201 | 0.4426 | 0.4494 |
 | Bai3 | ResNet-18 | 7/10 | 0.4753 | 0.5062 | 0.4616 | 0.4520 |
 | Bai4 | ResNet-50 pretrained | 5/5 | 0.8183 | 0.8173 | 0.8152 | 0.8138 |
-
-## Nhận xét
-
-- LeNet đủ cho MNIST (ảnh xám 28x28, 10 lớp), F1 gần 0.98 sau 10 epoch.
-- Trên VinaFood21, GoogLeNet và ResNet-18 train từ đầu chỉ đạt F1 khoảng 0.45. Với khoảng 10.000 ảnh cho 21 lớp, dữ liệu không đủ để học đặc trưng tốt từ đầu. ResNet-18 đạt đỉnh ở epoch 7 rồi dao động, GoogLeNet vẫn còn tăng ở epoch 10.
-- GoogLeNet không có BatchNorm thì không học được: loss đứng ở khoảng 2.98 và mô hình chỉ đoán một lớp. Thêm BatchNorm thì hội tụ bình thường. ResNet-18 có sẵn BatchNorm và kết nối tắt nên train ổn định ngay.
-- ResNet-50 pretrained trên ImageNet đạt F1 0.81 chỉ sau 5 epoch, cao gần gấp đôi hai mô hình train từ đầu. Với tập dữ liệu nhỏ, fine-tune mô hình đã huấn luyện sẵn hiệu quả hơn nhiều so với train từ đầu.
-- Lớp khó nhất với ResNet-18 và ResNet-50 là `ca-ri` (F1 lần lượt 0.25 và 0.41), cũng là một trong các lớp ít ảnh nhất trong tập test (171 ảnh).
