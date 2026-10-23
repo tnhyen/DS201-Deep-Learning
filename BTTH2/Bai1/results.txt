@@ -1,0 +1,29 @@
+Epoch 1 | loss 1.0967 | accuracy 0.8972 | precision 0.8962 | recall 0.8958 | f1 0.8953
+Epoch 2 | loss 0.2705 | accuracy 0.9426 | precision 0.9423 | recall 0.9421 | f1 0.9421
+Epoch 3 | loss 0.1723 | accuracy 0.9569 | precision 0.9564 | recall 0.9567 | f1 0.9565
+Epoch 4 | loss 0.1275 | accuracy 0.9669 | precision 0.9669 | recall 0.9665 | f1 0.9666
+Epoch 5 | loss 0.1017 | accuracy 0.9698 | precision 0.9694 | recall 0.9699 | f1 0.9696
+Epoch 6 | loss 0.0860 | accuracy 0.9770 | precision 0.9771 | recall 0.9767 | f1 0.9769
+Epoch 7 | loss 0.0743 | accuracy 0.9794 | precision 0.9792 | recall 0.9794 | f1 0.9793
+Epoch 8 | loss 0.0663 | accuracy 0.9792 | precision 0.9796 | recall 0.9789 | f1 0.9791
+Epoch 9 | loss 0.0592 | accuracy 0.9797 | precision 0.9796 | recall 0.9797 | f1 0.9795
+Epoch 10 | loss 0.0550 | accuracy 0.9800 | precision 0.9803 | recall 0.9796 | f1 0.9798
+Best model on test set:
+  accuracy : 0.9800
+  precision: 0.9803
+  recall   : 0.9796
+  f1       : 0.9798
+              precision    recall  f1-score   support
+           0     0.9867    0.9857    0.9862       980
+           1     0.9835    0.9982    0.9908      1135
+           2     0.9807    0.9864    0.9836      1032
+           3     0.9572    0.9960    0.9762      1010
+           4     0.9738    0.9847    0.9792       982
+           5     0.9787    0.9776    0.9781       892
+           6     0.9925    0.9676    0.9799       958
+           7     0.9668    0.9922    0.9794      1028
+           8     0.9936    0.9559    0.9744       974
+           9     0.9897    0.9514    0.9702      1009
+    accuracy                         0.9800     10000
+   macro avg     0.9803    0.9796    0.9798     10000
+weighted avg     0.9802    0.9800    0.9800     10000
