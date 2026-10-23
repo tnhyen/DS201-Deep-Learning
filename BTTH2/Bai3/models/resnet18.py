@@ -45,18 +45,18 @@ class ResNet18(nn.Module):
 
     def forward(self, images: torch.Tensor) -> torch.Tensor:
         x = F.relu(self.bn_1(self.conv_1(images)))  # (bs, 64, 112, 112)
-        x = self.pooling_1(x)                        # (bs, 64, 56, 56)
+        x = self.pooling_1(x)  # (bs, 64, 56, 56)
 
-        x = self.layer_1(x)                          # (bs, 64, 56, 56)
-        x = self.pooling_2(x)                        # (bs, 64, 27, 27)
+        x = self.layer_1(x)  # (bs, 64, 56, 56)
+        x = self.pooling_2(x)  # (bs, 64, 27, 27)
 
-        x = self.layer_2(x)                          # (bs, 128, 27, 27)
-        x = self.pooling_3(x)                        # (bs, 128, 13, 13)
+        x = self.layer_2(x)  # (bs, 128, 27, 27)
+        x = self.pooling_3(x)  # (bs, 128, 13, 13)
 
-        x = self.layer_3(x)                          # (bs, 256, 13, 13)
-        x = self.pooling_4(x)                        # (bs, 256, 6, 6)
+        x = self.layer_3(x)  # (bs, 256, 13, 13)
+        x = self.pooling_4(x)  # (bs, 256, 6, 6)
 
-        x = self.layer_4(x)                          # (bs, 512, 6, 6)
+        x = self.layer_4(x)  # (bs, 512, 6, 6)
 
-        x = self.avg_pooling(x).flatten(1)           # (bs, 512)
-        return self.fc(x)                            # (bs, num_classes)
+        x = self.avg_pooling(x).flatten(1)  # (bs, 512)
+        return self.fc(x)  # (bs, num_classes)

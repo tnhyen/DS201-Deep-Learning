@@ -68,26 +68,26 @@ class GoogLeNet(nn.Module):
         self.fc = nn.Linear(1024, num_classes)
 
     def forward(self, images: torch.Tensor) -> torch.Tensor:
-        x = self.conv_1(images)          # (bs, 64, 112, 112)
-        x = self.pooling_1(x)            # (bs, 64, 56, 56)
+        x = self.conv_1(images)  # (bs, 64, 112, 112)
+        x = self.pooling_1(x)  # (bs, 64, 56, 56)
 
-        x = self.conv_2(x)               # (bs, 64, 56, 56)
-        x = self.conv_3(x)               # (bs, 192, 56, 56)
-        x = self.pooling_2(x)            # (bs, 192, 28, 28)
+        x = self.conv_2(x)  # (bs, 64, 56, 56)
+        x = self.conv_3(x)  # (bs, 192, 56, 56)
+        x = self.pooling_2(x)  # (bs, 192, 28, 28)
 
-        x = self.inception_3a(x)         # (bs, 256, 28, 28)
-        x = self.inception_3b(x)         # (bs, 480, 28, 28)
-        x = self.pooling_3(x)            # (bs, 480, 14, 14)
+        x = self.inception_3a(x)  # (bs, 256, 28, 28)
+        x = self.inception_3b(x)  # (bs, 480, 28, 28)
+        x = self.pooling_3(x)  # (bs, 480, 14, 14)
 
-        x = self.inception_4a(x)         # (bs, 512, 14, 14)
-        x = self.inception_4b(x)         # (bs, 512, 14, 14)
-        x = self.inception_4c(x)         # (bs, 512, 14, 14)
-        x = self.inception_4d(x)         # (bs, 528, 14, 14)
-        x = self.inception_4e(x)         # (bs, 832, 14, 14)
-        x = self.pooling_4(x)            # (bs, 832, 7, 7)
+        x = self.inception_4a(x)  # (bs, 512, 14, 14)
+        x = self.inception_4b(x)  # (bs, 512, 14, 14)
+        x = self.inception_4c(x)  # (bs, 512, 14, 14)
+        x = self.inception_4d(x)  # (bs, 528, 14, 14)
+        x = self.inception_4e(x)  # (bs, 832, 14, 14)
+        x = self.pooling_4(x)  # (bs, 832, 7, 7)
 
-        x = self.inception_5a(x)         # (bs, 832, 7, 7)
-        x = self.inception_5b(x)         # (bs, 1024, 7, 7)
+        x = self.inception_5a(x)  # (bs, 832, 7, 7)
+        x = self.inception_5b(x)  # (bs, 1024, 7, 7)
 
         x = self.avg_pooling(x).flatten(1)  # (bs, 1024)
-        return self.fc(self.dropout(x))     # (bs, num_classes)
+        return self.fc(self.dropout(x))  # (bs, num_classes)

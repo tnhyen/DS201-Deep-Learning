@@ -1,15 +1,8 @@
-# Dữ liệu và file tạm
 **/Data/
 **/data/
-**/_tmp_cloud/
-**/Claude outputs/
-
-# Tài liệu giảng viên
 **/M*u/
 **/M*u.zip
 **/assignments.ipynb
-
-# Kết quả huấn luyện, môi trường
 **/checkpoints/
 *.pth
 **/__pycache__/
