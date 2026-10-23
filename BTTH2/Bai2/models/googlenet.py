@@ -1,38 +1,52 @@
 import torch
 from torch import nn
-import torch.nn.functional as F
+
+
+class ConvBlock(nn.Module):
+    def __init__(self, in_channels: int, out_channels: int, **kwargs):
+        super().__init__()
+        self.conv = nn.Conv2d(in_channels, out_channels, bias=False, **kwargs)
+        self.bn = nn.BatchNorm2d(out_channels)
+        self.relu = nn.ReLU(inplace=True)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.relu(self.bn(self.conv(x)))
 
 
 class InceptionBlock(nn.Module):
     def __init__(self, in_channels: int, c1: int, c2: tuple, c3: tuple, c4: int):
         super().__init__()
-        self.branch_1 = nn.Conv2d(in_channels, c1, kernel_size=1)
-
-        self.branch_2_1 = nn.Conv2d(in_channels, c2[0], kernel_size=1)
-        self.branch_2_2 = nn.Conv2d(c2[0], c2[1], kernel_size=3, padding=1)
-
-        self.branch_3_1 = nn.Conv2d(in_channels, c3[0], kernel_size=1)
-        self.branch_3_2 = nn.Conv2d(c3[0], c3[1], kernel_size=5, padding=2)
-
-        self.branch_4_1 = nn.MaxPool2d(kernel_size=3, stride=1, padding=1, ceil_mode=True)
-        self.branch_4_2 = nn.Conv2d(in_channels, c4, kernel_size=1)
+        self.branch_1 = ConvBlock(in_channels, c1, kernel_size=1)
+        self.branch_2 = nn.Sequential(
+            ConvBlock(in_channels, c2[0], kernel_size=1),
+            ConvBlock(c2[0], c2[1], kernel_size=3, padding=1)
+        )
+        self.branch_3 = nn.Sequential(
+            ConvBlock(in_channels, c3[0], kernel_size=1),
+            ConvBlock(c3[0], c3[1], kernel_size=5, padding=2)
+        )
+        self.branch_4 = nn.Sequential(
+            nn.MaxPool2d(kernel_size=3, stride=1, padding=1, ceil_mode=True),
+            ConvBlock(in_channels, c4, kernel_size=1)
+        )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        b1 = F.relu(self.branch_1(x))
-        b2 = F.relu(self.branch_2_2(F.relu(self.branch_2_1(x))))
-        b3 = F.relu(self.branch_3_2(F.relu(self.branch_3_1(x))))
-        b4 = F.relu(self.branch_4_2(self.branch_4_1(x)))
-        return torch.cat([b1, b2, b3, b4], dim=1)
+        return torch.cat([
+            self.branch_1(x),
+            self.branch_2(x),
+            self.branch_3(x),
+            self.branch_4(x)
+        ], dim=1)
 
 
 class GoogLeNet(nn.Module):
     def __init__(self, num_classes: int = 21):
         super().__init__()
-        self.conv_1 = nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3)
+        self.conv_1 = ConvBlock(3, 64, kernel_size=7, stride=2, padding=3)
         self.pooling_1 = nn.MaxPool2d(kernel_size=3, stride=2, ceil_mode=True)
 
-        self.conv_2 = nn.Conv2d(64, 64, kernel_size=1)
-        self.conv_3 = nn.Conv2d(64, 192, kernel_size=3, padding=1)
+        self.conv_2 = ConvBlock(64, 64, kernel_size=1)
+        self.conv_3 = ConvBlock(64, 192, kernel_size=3, padding=1)
         self.pooling_2 = nn.MaxPool2d(kernel_size=3, stride=2, ceil_mode=True)
 
         self.inception_3a = InceptionBlock(192, 64, (96, 128), (16, 32), 32)
@@ -54,11 +68,11 @@ class GoogLeNet(nn.Module):
         self.fc = nn.Linear(1024, num_classes)
 
     def forward(self, images: torch.Tensor) -> torch.Tensor:
-        x = F.relu(self.conv_1(images))  # (bs, 64, 112, 112)
+        x = self.conv_1(images)          # (bs, 64, 112, 112)
         x = self.pooling_1(x)            # (bs, 64, 56, 56)
 
-        x = F.relu(self.conv_2(x))       # (bs, 64, 56, 56)
-        x = F.relu(self.conv_3(x))       # (bs, 192, 56, 56)
+        x = self.conv_2(x)               # (bs, 64, 56, 56)
+        x = self.conv_3(x)               # (bs, 192, 56, 56)
         x = self.pooling_2(x)            # (bs, 192, 28, 28)
 
         x = self.inception_3a(x)         # (bs, 256, 28, 28)
