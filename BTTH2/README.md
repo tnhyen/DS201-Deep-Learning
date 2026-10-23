@@ -30,7 +30,7 @@ pip install -r requirements.txt
 python assignment_2.py
 ```
 
-Model có F1 tốt nhất được lưu ở `BaiN/checkpoints/best_model.pth`, log ở `BaiN/results.txt`.
+Model có F1 tốt nhất được lưu ở `BaiN/checkpoints/best_model.pth`.
 
 ## Ghi chú cài đặt
 

@@ -15,7 +15,6 @@ BTTHx/
     models/           # định nghĩa mô hình
     assignment_N.py   # huấn luyện và đánh giá
     requirements.txt
-    results.txt       # log kết quả
   README.md
 ```
 
