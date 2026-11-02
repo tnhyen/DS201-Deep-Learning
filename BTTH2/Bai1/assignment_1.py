@@ -2,7 +2,7 @@ from pathlib import Path
 
 import torch
 from torch import nn, optim
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, random_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
 from tqdm import tqdm
 
@@ -14,6 +14,7 @@ DATA_DIR = ROOT.parent / "Data" / "MNIST dataset"
 CKPT_PATH = ROOT / "checkpoints" / "best_model.pth"
 EPOCHS = 10
 BATCH_SIZE = 64
+VAL_RATIO = 0.1
 LR = 1e-3
 
 device = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
@@ -63,9 +64,15 @@ def main():
     torch.manual_seed(42)
     CKPT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
-    train_dataset = MnistDataset(DATA_DIR / "train-images-idx3-ubyte", DATA_DIR / "train-labels-idx1-ubyte")
+    full_train_dataset = MnistDataset(DATA_DIR / "train-images-idx3-ubyte", DATA_DIR / "train-labels-idx1-ubyte")
     test_dataset = MnistDataset(DATA_DIR / "t10k-images-idx3-ubyte", DATA_DIR / "t10k-labels-idx1-ubyte")
+    val_size = int(len(full_train_dataset) * VAL_RATIO)
+    train_dataset, val_dataset = random_split(
+        full_train_dataset, [len(full_train_dataset) - val_size, val_size],
+        generator=torch.Generator().manual_seed(42)
+    )
     train_dataloader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, collate_fn=collate_fn)
+    val_dataloader = DataLoader(val_dataset, batch_size=256, collate_fn=collate_fn)
     test_dataloader = DataLoader(test_dataset, batch_size=256, collate_fn=collate_fn)
 
     model = LeNet().to(device)
@@ -75,8 +82,8 @@ def main():
     best_f1 = 0.0
     for epoch in range(1, EPOCHS + 1):
         train_loss = train_one_epoch(model, train_dataloader, loss_fn, optimizer, epoch)
-        scores = evaluate(test_dataloader, model)
-        print(f"Epoch {epoch} | loss {train_loss:.4f} | " + " | ".join(f"{k} {v:.4f}" for k, v in scores.items()))
+        scores = evaluate(val_dataloader, model)
+        print(f"Epoch {epoch} | loss {train_loss:.4f} | val " + " | ".join(f"{k} {v:.4f}" for k, v in scores.items()))
 
         if scores["f1"] > best_f1:
             best_f1 = scores["f1"]

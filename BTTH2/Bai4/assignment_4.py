@@ -2,7 +2,7 @@ from pathlib import Path
 
 import torch
 from torch import nn, optim
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, random_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
 from tqdm import tqdm
 
@@ -14,6 +14,7 @@ DATA_DIR = ROOT.parent / "Data" / "VinaFood21 dataset"
 CKPT_PATH = ROOT / "checkpoints" / "best_model.pth"
 EPOCHS = 5
 BATCH_SIZE = 32
+VAL_RATIO = 0.1
 LR = 1e-4
 NUM_WORKERS = 4
 
@@ -64,22 +65,29 @@ def main():
     torch.manual_seed(42)
     CKPT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
-    train_dataset = VinaFoodDataset(DATA_DIR / "train")
+    full_train_dataset = VinaFoodDataset(DATA_DIR / "train")
     test_dataset = VinaFoodDataset(DATA_DIR / "test")
+    val_size = int(len(full_train_dataset) * VAL_RATIO)
+    train_dataset, val_dataset = random_split(
+        full_train_dataset, [len(full_train_dataset) - val_size, val_size],
+        generator=torch.Generator().manual_seed(42)
+    )
     train_dataloader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True,
                                   num_workers=NUM_WORKERS, collate_fn=collate_fn)
+    val_dataloader = DataLoader(val_dataset, batch_size=BATCH_SIZE * 2,
+                                num_workers=NUM_WORKERS, collate_fn=collate_fn)
     test_dataloader = DataLoader(test_dataset, batch_size=BATCH_SIZE * 2,
                                  num_workers=NUM_WORKERS, collate_fn=collate_fn)
 
-    model = PretrainedResNet50(num_classes=len(train_dataset.classes)).to(device)
+    model = PretrainedResNet50(num_classes=len(full_train_dataset.classes)).to(device)
     loss_fn = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=LR)
 
     best_f1 = 0.0
     for epoch in range(1, EPOCHS + 1):
         train_loss = train_one_epoch(model, train_dataloader, loss_fn, optimizer, epoch)
-        scores = evaluate(test_dataloader, model)
-        print(f"Epoch {epoch} | loss {train_loss:.4f} | " + " | ".join(f"{k} {v:.4f}" for k, v in scores.items()))
+        scores = evaluate(val_dataloader, model)
+        print(f"Epoch {epoch} | loss {train_loss:.4f} | val " + " | ".join(f"{k} {v:.4f}" for k, v in scores.items()))
 
         if scores["f1"] > best_f1:
             best_f1 = scores["f1"]
