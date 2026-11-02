@@ -34,7 +34,7 @@ Notebook chạy trên Kaggle: https://www.kaggle.com/code/hoanggyen/ds201-lab02
 
 | Bài | Mô hình | Accuracy | Precision | Recall | F1 |
 |---|---|---|---|---|---|
-| Bai1 | LeNet | 0.9800 | 0.9803 | 0.9796 | 0.9798 |
-| Bai2 | GoogLeNet | 0.4677 | 0.5201 | 0.4426 | 0.4494 |
-| Bai3 | ResNet-18 | 0.4753 | 0.5062 | 0.4616 | 0.4520 |
-| Bai4 | ResNet-50 pretrained | 0.8183 | 0.8173 | 0.8152 | 0.8138 |
+| Bai1 | LeNet | 0.9832 | 0.9830 | 0.9833 | 0.9831 |
+| Bai2 | GoogLeNet | 0.4805 | 0.4891 | 0.4530 | 0.4409 |
+| Bai3 | ResNet-18 | 0.4720 | 0.5231 | 0.4341 | 0.4388 |
+| Bai4 | ResNet-50 pretrained | 0.8135 | 0.8163 | 0.8084 | 0.8081 |
