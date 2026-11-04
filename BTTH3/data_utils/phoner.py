@@ -43,7 +43,8 @@ class Vocab:
             self.w2i[word] = idx
         self.i2w = {idx: word for word, idx in self.w2i.items()}
 
-        # tag mapping lấy từ train (đủ 20 nhãn, kể cả I-GENDER không có trong dev)
+        # tag mapping lấy từ train, gồm 20 nhãn (10 B-, 9 I-, O).
+        # Dataset không có I-GENDER; dev thiếu I-AGE nhưng mapping vẫn giữ.
         self.t2i = {tag: idx for idx, tag in enumerate(sorted(tags))}
         self.i2t = {idx: tag for tag, idx in self.t2i.items()}
 

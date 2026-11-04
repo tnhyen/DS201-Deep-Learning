@@ -8,6 +8,12 @@
 
 Cả 3 bài: Embedding 256, dropout 0.2, Adam (lr = 0.001), batch size 32, CrossEntropyLoss, early stopping patience 5 trên dev.
 
+## Dữ liệu và thư viện
+
+- UIT-VSFC: 3 file JSON (train 11.426 / dev 1.583 / test 3.166), tải từ Google Drive của đề bài.
+- PhoNER-COVID19: bản word-level (train 5.027 / dev 2.000 / test 3.000), clone từ GitHub của VinAI.
+- Thư viện: `torch`, `scikit-learn`, `seqeval`, `numpy`, `tqdm` (Kaggle có sẵn, trừ `seqeval`).
+
 ## Cấu trúc
 
 ```
@@ -27,6 +33,10 @@ BTTH3/
 ```
 
 ## Chạy
+
+Trên Kaggle: mở `run_kaggle.ipynb` (bật GPU T4 và Internet), chạy lần lượt các cell. Notebook tự clone repo, tải dữ liệu, chạy `check_batch.py` rồi train 3 bài.
+
+Chạy từng bài bằng lệnh:
 
 ```bash
 pip install seqeval   # chỉ cần cho Bài 3
@@ -56,7 +66,7 @@ Tham số chung: `--checkpoint_dir` (mặc định `/kaggle/working/checkpoints`
 
 ## Kết quả thực nghiệm
 
-Kaggle GPU T4; best epoch ghi dạng `best / số epoch đã chạy` (early stopping, patience 5).
+Kaggle GPU T4; best epoch ghi dạng `best / số epoch đã chạy` (early stopping, patience 5). Bài 1, 2 dùng Macro F1 trên câu, Bài 3 dùng F1 mức thực thể, nên không so sánh trực tiếp F1 giữa phân loại văn bản và NER.
 
 | | LSTM | GRU | BiLSTM (NER) |
 | --- | --- | --- | --- |
