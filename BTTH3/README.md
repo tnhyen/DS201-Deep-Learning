@@ -66,7 +66,7 @@ Tham số chung: `--checkpoint_dir` (mặc định `/kaggle/working/checkpoints`
 
 ## Kết quả thực nghiệm
 
-Điền sau khi chạy trên Kaggle (lấy từ `checkpoints/<model>_results.json`; thời gian train lấy từ log của Kaggle).
+Chạy trên Kaggle GPU T4 (version 2, 03/11/2026). Best epoch ghi dạng `best / số epoch đã chạy` (dừng do early stopping, patience 5). Thời gian train lấy từ log Kaggle, tính từ lúc khởi tạo model đến lúc nạp best model.
 
 | Thông số | LSTM | GRU | BiLSTM |
 | --- | --- | --- | --- |
@@ -76,7 +76,7 @@ Tham số chung: `--checkpoint_dir` (mặc định `/kaggle/working/checkpoints`
 | Batch size | 32 | 32 | 32 |
 | Learning rate | 0.001 | 0.001 | 0.001 |
 | Độ đo | Macro F1 | Macro F1 | Entity F1 (micro) |
-| Best epoch | — | — | — |
-| Best dev F1 | — | — | — |
-| Test F1 | — | — | — |
-| Training time | — | — | — |
+| Best epoch | 3 / 8 | 14 / 19 | 10 / 15 |
+| Best dev F1 | 0.7428 | 0.7642 | 0.8851 |
+| Test F1 | 0.7404 | 0.7407 | 0.8737 (macro 0.7958) |
+| Training time | ~54 s | ~108 s | ~99 s |
