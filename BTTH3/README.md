@@ -23,8 +23,7 @@ BTTH3/
 ├── assignment_2.py      # dùng lại pipeline Bài 1, thay LSTM bằng GRU
 ├── assignment_3.py      # train/evaluate theo token, F1 mức thực thể
 ├── check_batch.py       # kiểm tra 1 batch (shape, nhãn, padding, forward, loss) trước khi train
-├── run_kaggle.ipynb     # notebook chạy trên Kaggle (kèm output)
-└── Sample/              # code mẫu của giảng viên, giữ để đối chiếu
+└── run_kaggle.ipynb     # notebook chạy trên Kaggle (kèm output)
 ```
 
 ## Chạy

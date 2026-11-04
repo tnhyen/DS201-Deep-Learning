@@ -10,3 +10,6 @@ checkpoints/
 *.zip
 UIT-VSFC/
 PhoNER_COVID19/
+
+# code mẫu của giảng viên, chỉ giữ ở máy
+Sample/
