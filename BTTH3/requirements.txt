@@ -1,0 +1,5 @@
+torch
+scikit-learn
+seqeval
+numpy
+tqdm
